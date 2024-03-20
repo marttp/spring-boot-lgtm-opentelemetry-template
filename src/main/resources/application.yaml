@@ -5,11 +5,9 @@ spring:
   application:
     name: coupon
   datasource:
-    url: jdbc:otel:postgresql://localhost:5432/coupon
+    url: jdbc:postgresql://localhost:5432/coupon
     username: myuser
     password: secret
-    driver-class-name: io.opentelemetry.instrumentation.jdbc.OpenTelemetryDriver # In order to use OpenTelemetry JDBC instrumentation
-
   docker:
     compose:
       enabled: false # Enable if you use Docker Compose - I use Podman Compose
@@ -30,40 +28,6 @@ management:
     web:
       exposure:
         include: "health,metrics"
-  otlp:
-    metrics:
-      export:
-        # Supported configs
-        url: "http://localhost:4318/v1/metrics"
-        aggregationTemporality: "cumulative"
-        step: 5s
-  opentelemetry:
-    resource-attributes:
-      environment: dev
-      service-name: ${spring.application.name}
-      instance-id: localhost:8080
 logging:
   level:
     dev.tpcoder.coupon: debug
-
-# OpenTelemetry configuration
-# If you not comfortable with YAML, You can inject the configuration using environment variables
-otel:
-  service:
-    name: ${spring.application.name}
-  resource:
-    attributes:
-      environment: dev
-      service-name: ${spring.application.name}
-      instance-id: localhost:8080
-  exporter:
-    otlp:
-      endpoint: http://localhost:4317
-      protocol: grpc # If you use http will replace to 4318
-  propagators:
-    - tracecontext
-  metric:
-    export:
-      interval: 5s
-  logs:
-    exporter: otlp # Need to be setup because it's disable by default

@@ -24,24 +24,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
     runtimeOnly 'org.postgresql:postgresql'
-
-    // OpenTelemetry for Spring Boot
-    implementation 'io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter'
-    // In order to publish metric to OTLP
-    implementation 'io.micrometer:micrometer-registry-otlp:latest.release'
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
-}
-
-dependencyManagement {
-    imports {
-        // OpenTelemetry without agent instrumentation
-        mavenBom("io.opentelemetry:opentelemetry-bom:1.36.0")
-        mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom-alpha:2.2.0-alpha")
-    }
 }
 
 tasks.named('test') {
