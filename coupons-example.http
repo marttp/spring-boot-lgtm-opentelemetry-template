@@ -1,0 +1,24 @@
+# Get all coupons
+GET http://localhost:8080/api/v1/coupons
+
+### Get a specific coupon by ID
+GET http://localhost:8080/api/v1/coupons/22
+
+### Create a new coupon
+POST http://localhost:8080/api/v1/coupons
+Content-Type: application/json
+
+{
+  "title": "Winter Discount",
+  "description": "Save 30% on winter apparel",
+  "startDate": "2024-12-01T00:00:00",
+  "endDate": "2025-01-31T23:59:59",
+  "operator": "DISCOUNT",
+  "value": 0.30
+}
+
+### Delete a coupon
+DELETE http://localhost:8080/api/v1/coupons/3
+
+### Get active coupons within a date range
+GET http://localhost:8080/api/v1/coupons/active?startDate=2024-03-21T00:00:00&endDate=2024-03-25T23:59:59
