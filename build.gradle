@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.0-SNAPSHOT'
@@ -17,18 +19,45 @@ repositories {
     maven { url 'https://repo.spring.io/snapshot' }
 }
 
+configurations {
+    agent
+}
+
 dependencies {
+    implementation("io.opentelemetry:opentelemetry-api")
+    agent("io.opentelemetry.javaagent:opentelemetry-javaagent:2.2.0")
+
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
     runtimeOnly 'org.postgresql:postgresql'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
 }
 
+dependencyManagement {
+    imports {
+        mavenBom("io.opentelemetry:opentelemetry-bom:1.36.0")
+        mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom-alpha:2.2.0-alpha")
+    }
+}
+
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+task copyAgent(type: Copy) {
+    from configurations.agent {
+        rename "opentelemetry-javaagent-.*\\.jar", "opentelemetry-javaagent.jar"
+    }
+    into layout.buildDirectory.dir("agent")
+}
+
+tasks.named('bootJar') {
+    dependsOn(copyAgent)
+    archiveFileName = "app.jar"
 }
