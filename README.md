@@ -1,0 +1,3 @@
+# Spring Boot 3.2 Project template with LGTM stack
+
+Description in progress...
