@@ -11,6 +11,22 @@ services:
   lgtm:
     image: grafana/otel-lgtm
     ports:
-      - '4317:4317'
-      - '4318:4318'
+      - '4317'
+      - '4318'
       - '3000:3000'
+  coupon:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/coupon
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: secret
+      OTEL_RESOURCE_ATTRIBUTES: service.name=coupon,service.instance.id=coupon:8080,env=dev
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://lgtm:4317
+      OTEL_SERVICE_NAME: "coupon"
+      # Logs are disabled by default
+      OTEL_LOGS_EXPORTER: "otlp"
+    depends_on:
+      - postgres
+      - lgtm
