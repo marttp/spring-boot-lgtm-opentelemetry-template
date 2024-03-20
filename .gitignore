@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# OTLP Agent for Java
+opentelemetry-javaagent-v2.1.0.jar
