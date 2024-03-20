@@ -1,4 +1,4 @@
-package dev.tpcoder.coupon;
+package dev.tpcoder.coupon.exception;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException() {

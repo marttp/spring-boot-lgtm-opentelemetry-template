@@ -1,5 +1,6 @@
 package dev.tpcoder.coupon;
 
+import dev.tpcoder.coupon.exception.FakeInternalException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,9 @@ public class CouponController {
     @GetMapping("/active")
     public List<Coupon> getActiveCoupons(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        if (random.nextInt(3) > 1) {
+            throw new FakeInternalException("Failed to fetch active coupons");
+        }
         return couponService.findActiveCoupons(startDate, endDate);
     }
 }
